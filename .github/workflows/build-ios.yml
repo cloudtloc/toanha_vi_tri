@@ -32,4 +32,12 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: unsigned-ipa
-          path: toanha_vi_tri.ipa
+          path: app.ipa
+
+      - name: Hien thi link tai IPA
+        run: |
+          echo "## Tai file IPA (unsigned-ipa)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Chay xong. De tai file **app.ipa**: vao trang run nay, keo xuong phan **Artifacts**, bam vao **unsigned-ipa** de tai ve." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Link truc tiep trang run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> $GITHUB_STEP_SUMMARY
