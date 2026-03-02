@@ -87,7 +87,10 @@ class _ToaNhaListScreenState extends State<ToaNhaListScreen> {
           ),
         ],
       ),
-      body: _buildBody(),
+      body: RefreshIndicator(
+        onRefresh: _load,
+        child: _buildBody(),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           final created = await Navigator.push<bool>(
@@ -105,30 +108,46 @@ class _ToaNhaListScreenState extends State<ToaNhaListScreen> {
 
   Widget _buildBody() {
     if (_loading) {
-      return const Center(child: CircularProgressIndicator());
+      return ListView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        children: const [
+          SizedBox(height: 200),
+          Center(child: CircularProgressIndicator()),
+        ],
+      );
     }
     if (_error != null) {
-      return Center(
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(_error!, textAlign: TextAlign.center),
-              const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: _load,
-                child: const Text('Thu lai'),
-              ),
-            ],
+      return ListView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(_error!, textAlign: TextAlign.center),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: _load,
+                  child: const Text('Thu lai'),
+                ),
+              ],
+            ),
           ),
-        ),
+        ],
       );
     }
     if (_list.isEmpty) {
-      return const Center(child: Text('Chua co toa nha nao'));
+      return ListView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        children: const [
+          SizedBox(height: 200),
+          Center(child: Text('Chua co toa nha nao')),
+        ],
+      );
     }
     return ListView.builder(
+      physics: const AlwaysScrollableScrollPhysics(),
       padding: const EdgeInsets.all(8),
       itemCount: _list.length,
       itemBuilder: (context, index) {
