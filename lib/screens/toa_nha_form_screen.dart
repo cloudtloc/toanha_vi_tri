@@ -64,6 +64,20 @@ class _ToaNhaFormScreenState extends State<ToaNhaFormScreen> {
     _viDo = TextEditingController(text: t?.viDo?.toString() ?? '');
     _toaDoBien = TextEditingController(text: t?.toaDoBien ?? '');
     _viTri = TextEditingController(text: t?.viTri ?? '');
+    _parseToaDoBienVaoBonGoc(t?.toaDoBien);
+  }
+
+  void _parseToaDoBienVaoBonGoc(String? s) {
+    if (s == null || s.trim().isEmpty) return;
+    final parts = s.trim().split(';');
+    for (var i = 0; i < 4 && i < parts.length; i++) {
+      final p = parts[i].trim().split(',');
+      if (p.length >= 2) {
+        final lat = double.tryParse(p[0].trim());
+        final lng = double.tryParse(p[1].trim());
+        if (lat != null && lng != null) _bienDiem[i] = _DiemBien(lat, lng);
+      }
+    }
   }
 
   @override

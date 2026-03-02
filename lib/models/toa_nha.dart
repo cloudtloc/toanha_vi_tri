@@ -83,7 +83,7 @@ class ToaNhaViTriRequest {
     if (tenChiTiet != null) m['tenChiTiet'] = tenChiTiet;
     if (kinhDo != null) m['kinhDo'] = kinhDo;
     if (viDo != null) m['viDo'] = viDo;
-    if (toaDoBien != null) m['toaDoBien'] = toaDoBien;
+    m['toaDoBien'] = toaDoBien;
     if (viTri != null) m['viTri'] = viTri;
     if (khuId != null) m['khuId'] = khuId;
     return m;
@@ -105,7 +105,7 @@ class ToaNhaViTriUpdateRequest {
     final m = <String, dynamic>{};
     if (kinhDo != null) m['kinhDo'] = kinhDo;
     if (viDo != null) m['viDo'] = viDo;
-    if (toaDoBien != null) m['toaDoBien'] = toaDoBien;
+    m['toaDoBien'] = toaDoBien;
     return m;
   }
 }
