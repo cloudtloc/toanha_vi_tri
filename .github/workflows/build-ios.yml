@@ -11,6 +11,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Tao file .env tu GitHub Secrets
+        run: |
+          cat << 'EOF' > .env
+          BACKEND_BASE_URL=${{ secrets.BACKEND_BASE_URL }}
+          GOOGLE_MAPS_API_KEY=${{ secrets.GOOGLE_MAPS_API_KEY }}
+          EOF
+
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
