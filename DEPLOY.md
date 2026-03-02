@@ -38,3 +38,36 @@ git push -u origin main
 6. Phan **Artifacts** se co file `unsigned-ipa` (app.ipa) - nhan de tai ve
 
 Luu y: IPA build bang workflow nay la **unsigned** (chua ky). De caidat len thiet bi that can ky lai hoac dung dang development/ad-hoc.
+
+## Cau hinh Google Maps cho iOS
+
+1. Tao file `ios/Runner/Secrets.xcconfig` (khong commit len git, da duoc ignore nhu `.env`):
+
+   Noi dung vi du:
+
+   ```text
+   GMS_API_KEY=YOUR_IOS_MAPS_KEY
+   ```
+
+2. Mo project iOS trong Xcode (`ios/Runner.xcworkspace` neu co), vao target `Runner`:
+
+   - Tab **Build Settings** → tim `Base Configuration`.
+   - Gan `Runner/Secrets.xcconfig` cho Debug va Release (neu chua gan).
+
+3. Trong `ios/Runner/Info.plist` da co:
+
+   ```xml
+   <key>GMS_API_KEY</key>
+   <string>$(GMS_API_KEY)</string>
+   ```
+
+   Va trong `AppDelegate.swift` da goi:
+
+   ```swift
+   if let apiKey = Bundle.main.object(forInfoDictionaryKey: "GMS_API_KEY") as? String,
+      !apiKey.isEmpty {
+     GMSServices.provideAPIKey(apiKey)
+   }
+   ```
+
+Chi can dat key dung vao `Secrets.xcconfig` la app iOS se dung duoc Google Maps ma khong lo ro key trong code.

@@ -79,11 +79,11 @@ class _ToaNhaListScreenState extends State<ToaNhaListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Vi tri toa nha'),
+        title: const Text('Vị trí toà nhà'),
         actions: [
           TextButton(
             onPressed: _loading ? null : _load,
-            child: const Text('Tai lai'),
+            child: const Text('Tải lại'),
           ),
         ],
       ),
@@ -101,7 +101,7 @@ class _ToaNhaListScreenState extends State<ToaNhaListScreen> {
           );
           if (created == true) _load();
         },
-        child: const Text('Them'),
+        child: const Text('Thêm'),
       ),
     );
   }
@@ -129,7 +129,7 @@ class _ToaNhaListScreenState extends State<ToaNhaListScreen> {
                 const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: _load,
-                  child: const Text('Thu lai'),
+                  child: const Text('Thử lại'),
                 ),
               ],
             ),
@@ -142,7 +142,7 @@ class _ToaNhaListScreenState extends State<ToaNhaListScreen> {
         physics: const AlwaysScrollableScrollPhysics(),
         children: const [
           SizedBox(height: 200),
-          Center(child: Text('Chua co toa nha nao')),
+          Center(child: Text('Chưa có toà nhà nào')),
         ],
       );
     }
@@ -166,7 +166,7 @@ class _ToaNhaListScreenState extends State<ToaNhaListScreen> {
               children: [
                 if (item.coViTri)
                   Text(
-                    'Vi do: ${item.viDo?.toStringAsFixed(4) ?? "-"}, Kinh do: ${item.kinhDo?.toStringAsFixed(4) ?? "-"}',
+                    'Vĩ: ${item.viDo?.toStringAsFixed(4) ?? "-"}, Kinh: ${item.kinhDo?.toStringAsFixed(4) ?? "-"}',
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                 const SizedBox(width: 8),
@@ -198,15 +198,15 @@ class _ToaNhaListScreenState extends State<ToaNhaListScreen> {
                   itemBuilder: (ctx) => [
                     const PopupMenuItem(
                       value: 'sua',
-                      child: Text('Sua toa nha'),
+                      child: Text('Sửa toà nhà'),
                     ),
                     const PopupMenuItem(
                       value: 'cap_nhat_vi_tri',
-                      child: Text('Cap nhat vi tri'),
+                      child: Text('Cập nhật vị trí'),
                     ),
                     const PopupMenuItem(
                       value: 'xoa_vi_tri',
-                      child: Text('Xoa vi tri'),
+                      child: Text('Xóa vị trí'),
                     ),
                   ],
                 ),

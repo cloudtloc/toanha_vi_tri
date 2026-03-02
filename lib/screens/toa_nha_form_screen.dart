@@ -4,6 +4,7 @@ import '../models/toa_nha.dart';
 import '../services/location_service.dart';
 import '../services/toa_nha_api_service.dart';
 import '../utils/app_snackbar.dart';
+import 'map_picker_screen.dart';
 
 class ToaNhaFormScreen extends StatefulWidget {
   final ToaNhaViTri? toaNha;
@@ -159,6 +160,37 @@ class _ToaNhaFormScreenState extends State<ToaNhaFormScreen> {
     }
   }
 
+  Future<void> _moBanDoGoogleMap() async {
+    final lat = double.tryParse(_viDo.text.trim());
+    final lng = double.tryParse(_kinhDo.text.trim());
+    final polygon = _toaDoBien.text.trim().isEmpty ? null : _toaDoBien.text.trim();
+
+    final result = await Navigator.push<Map<String, dynamic>>(
+      context,
+      MaterialPageRoute(
+        builder: (ctx) => MapPickerScreen(
+          initialLatitude: lat,
+          initialLongitude: lng,
+          initialPolygon: polygon,
+        ),
+      ),
+    );
+
+    if (result == null) return;
+    final resLat = result['lat'] as double?;
+    final resLng = result['lng'] as double?;
+    final resPolygon = result['polygon'] as String?;
+
+    if (resLat != null && resLng != null) {
+      _viDo.text = resLat.toStringAsFixed(6);
+      _kinhDo.text = resLng.toStringAsFixed(6);
+    }
+    if (resPolygon != null && resPolygon.isNotEmpty) {
+      _toaDoBien.text = resPolygon;
+      _parseToaDoBienVaoBonGoc(resPolygon);
+    }
+  }
+
   Future<void> _luu() async {
     if (!_formKey.currentState!.validate()) return;
     setState(() => _saving = true);
@@ -189,13 +221,13 @@ class _ToaNhaFormScreenState extends State<ToaNhaFormScreen> {
         );
       }
       if (mounted) {
-        showThongBao(context, 'Luu thanh cong');
+        showThongBao(context, 'Lưu thành công');
         Navigator.pop(context, true);
       }
     } catch (e) {
       if (mounted) {
         setState(() => _saving = false);
-        showThongBao(context, 'Loi: $e', isLoi: true);
+        showThongBao(context, 'Lỗi: $e', isLoi: true);
       }
     }
   }
@@ -206,10 +238,10 @@ class _ToaNhaFormScreenState extends State<ToaNhaFormScreen> {
       appBar: AppBar(
         title: Text(
           chiCapNhatViTri
-              ? 'Cap nhat vi tri'
+              ? 'Cập nhật vị trí'
               : isEdit
-                  ? 'Sua toa nha'
-                  : 'Them toa nha',
+                  ? 'Sửa toà nhà'
+                  : 'Thêm toà nhà',
         ),
       ),
       body: Form(
@@ -221,13 +253,13 @@ class _ToaNhaFormScreenState extends State<ToaNhaFormScreen> {
               TextFormField(
                 controller: _maToaNha,
                 decoration: const InputDecoration(
-                  labelText: 'Ma toa nha',
+                  labelText: 'Mã toa nha',
                   border: OutlineInputBorder(),
                 ),
                 enabled: !isEdit,
                 validator: (v) {
                   if (!isEdit && (v == null || v.trim().isEmpty)) {
-                    return 'Nhap ma toa nha';
+                    return 'Nhập mã toa nha';
                   }
                   return null;
                 },
@@ -236,7 +268,7 @@ class _ToaNhaFormScreenState extends State<ToaNhaFormScreen> {
               TextFormField(
                 controller: _tenToaNha,
                 decoration: const InputDecoration(
-                  labelText: 'Ten toa nha',
+                  labelText: 'Tên toa nha',
                   border: OutlineInputBorder(),
                 ),
               ),
@@ -244,12 +276,12 @@ class _ToaNhaFormScreenState extends State<ToaNhaFormScreen> {
               TextFormField(
                 controller: _tenChiTiet,
                 decoration: const InputDecoration(
-                  labelText: 'Ten chi tiet',
+                  labelText: 'Tên chi tiết',
                   border: OutlineInputBorder(),
                 ),
                 validator: (v) {
                   if (!isEdit && (v == null || v.trim().isEmpty)) {
-                    return 'Nhap ten chi tiet';
+                    return 'Nhập tên chi tiết';
                   }
                   return null;
                 },
@@ -258,29 +290,23 @@ class _ToaNhaFormScreenState extends State<ToaNhaFormScreen> {
               TextFormField(
                 controller: _viTri,
                 decoration: const InputDecoration(
-                  labelText: 'Vi tri (mo ta)',
+                  labelText: 'Vị trí (mô tả)',
                   border: OutlineInputBorder(),
                 ),
               ),
               const SizedBox(height: 16),
             ],
-            const Text('Toa do (vi tri)', style: TextStyle(fontWeight: FontWeight.bold)),
+            const Text('Tọa độ (vị trí)', style: TextStyle(fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),
             OutlinedButton(
-              onPressed: _locationLoading ? null : _layViTriHienTai,
-              child: _locationLoading
-                  ? const SizedBox(
-                      height: 20,
-                      width: 20,
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    )
-                  : const Text('Lay vi tri hien tai tu thiet bi (GPS)'),
+              onPressed: _moBanDoGoogleMap,
+              child: const Text('Mở Google Maps'),
             ),
             if (_lastAccuracyMeters != null)
               Padding(
                 padding: const EdgeInsets.only(top: 8),
                 child: Text(
-                  'Do chinh xac lan lay truoc: ${_lastAccuracyMeters!.toStringAsFixed(1)}m',
+                  'Độ chính xác lần lấy trước: ${_lastAccuracyMeters!.toStringAsFixed(1)}m',
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
               ),
@@ -288,7 +314,7 @@ class _ToaNhaFormScreenState extends State<ToaNhaFormScreen> {
             TextFormField(
               controller: _viDo,
               decoration: const InputDecoration(
-                labelText: 'Vi do (latitude)',
+                labelText: 'Vĩ độ (latitude)',
                 border: OutlineInputBorder(),
                 hintText: 'VD: 9.942345',
               ),
@@ -298,7 +324,7 @@ class _ToaNhaFormScreenState extends State<ToaNhaFormScreen> {
             TextFormField(
               controller: _kinhDo,
               decoration: const InputDecoration(
-                labelText: 'Kinh do (longitude)',
+                labelText: 'Kinh độ (longitude)',
                 border: OutlineInputBorder(),
                 hintText: 'VD: 106.345678',
               ),
@@ -306,63 +332,16 @@ class _ToaNhaFormScreenState extends State<ToaNhaFormScreen> {
             ),
             const SizedBox(height: 12),
             const Text(
-              'Toa do bien (polygon) - 4 goc toa nha',
+              'Tọa độ polygon',
               style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 6),
-            Text(
-              'Di lan luot den 4 goc toa nha, moi goc bam nut lay vi tri tuong ung.',
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
-            const SizedBox(height: 8),
-            Row(
-              children: List.generate(4, (i) {
-                final diem = _bienDiem[i];
-                final loading = _bienLoadingIndex == i;
-                return Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 4),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        OutlinedButton(
-                          onPressed: loading ? null : () => _layDiemBien(i),
-                          child: loading
-                              ? const SizedBox(
-                                  height: 18,
-                                  width: 18,
-                                  child: CircularProgressIndicator(strokeWidth: 2),
-                                )
-                              : Text('Goc ${i + 1}'),
-                        ),
-                        if (diem != null)
-                          Padding(
-                            padding: const EdgeInsets.only(top: 4),
-                            child: Text(
-                              '${diem.lat.toStringAsFixed(4)}, ${diem.lng.toStringAsFixed(4)}',
-                              style: Theme.of(context).textTheme.bodySmall,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                      ],
-                    ),
-                  ),
-                );
-              }),
-            ),
-            const SizedBox(height: 6),
-            OutlinedButton(
-              onPressed: _bienDiem.any((d) => d != null) ? _xoaBonDiemBien : null,
-              child: const Text('Xoa 4 diem bien'),
             ),
             const SizedBox(height: 12),
             TextFormField(
               controller: _toaDoBien,
               decoration: const InputDecoration(
-                labelText: 'Toa do bien (chuoi polygon)',
+                labelText: 'Tọa độ polygon)',
                 border: OutlineInputBorder(),
-                hintText: 'Tu dong dien khi lay du 4 goc, hoac nhap tay',
+                hintText: 'Nhập tay hoặc chọn 3 điểm trở lên  trên bản đồ',
                 alignLabelWithHint: true,
               ),
               maxLines: 3,
@@ -376,7 +355,7 @@ class _ToaNhaFormScreenState extends State<ToaNhaFormScreen> {
                       width: 24,
                       child: CircularProgressIndicator(strokeWidth: 2),
                     )
-                  : const Text('Luu'),
+                  : const Text('Lưu'),
             ),
           ],
         ),

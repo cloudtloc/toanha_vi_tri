@@ -66,6 +66,8 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>GMS_API_KEY</key>
+	<string>$(GMS_API_KEY)</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Ung dung can truy cap vi tri de lay toa do GPS khi ban chon "Lay vi tri hien tai" va "Lay 4 goc toa nha".</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
