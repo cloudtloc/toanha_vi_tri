@@ -47,9 +47,15 @@ class _ToaNhaFormScreenState extends State<ToaNhaFormScreen> {
   bool get isEdit => widget.toaNha != null;
   bool get chiCapNhatViTri => widget.chiCapNhatViTri;
 
+  /// Yeu cau quyen vi tri ngay khi mo man hinh form de iOS hien dialog truoc khi nguoi dung bam "Lay vi tri".
+  void _yeuCauQuyenViTriKhiMoManHinh() {
+    LocationService.requestPermission();
+  }
+
   @override
   void initState() {
     super.initState();
+    _yeuCauQuyenViTriKhiMoManHinh();
     final t = widget.toaNha;
     _maToaNha = TextEditingController(text: t?.maToaNha ?? '');
     _tenToaNha = TextEditingController(text: t?.tenToaNha ?? '');

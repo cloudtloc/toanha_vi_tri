@@ -67,6 +67,8 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Ung dung can vi tri chinh xac de gan toa do cho toa nha.</string>
+	<string>Ung dung can truy cap vi tri de lay toa do GPS khi ban chon "Lay vi tri hien tai" va "Lay 4 goc toa nha".</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Ung dung can truy cap vi tri de gan toa do cho toa nha. Chi can chon "Khi dang dung ung dung" la du.</string>
 </dict>
 </plist>
