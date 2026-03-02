@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../models/toa_nha.dart';
 import '../services/location_service.dart';
 import '../services/toa_nha_api_service.dart';
+import '../utils/app_snackbar.dart';
 
 class ToaNhaFormScreen extends StatefulWidget {
   final ToaNhaViTri? toaNha;
@@ -107,25 +108,18 @@ class _ToaNhaFormScreenState extends State<ToaNhaFormScreen> {
       }
       if (parts.length == 4) {
         _toaDoBien.text = parts.join(';');
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Da lay du 4 goc. Toa do bien da duoc dien.')),
-        );
+        showThongBao(context, 'Da lay du 4 goc. Toa do bien da duoc dien.');
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              'Da lay goc ${index + 1}/4. Di den goc ${index + 2} va bam tiep.',
-            ),
-          ),
+        showThongBao(
+          context,
+          'Da lay goc ${index + 1}/4. Di den goc ${index + 2} va bam tiep.',
         );
       }
       setState(() => _bienLoadingIndex = null);
     } catch (e) {
       if (mounted) {
         setState(() => _bienLoadingIndex = null);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Loi: $e')),
-        );
+        showThongBao(context, 'Loi: $e', isLoi: true);
       }
     }
   }
@@ -135,9 +129,7 @@ class _ToaNhaFormScreenState extends State<ToaNhaFormScreen> {
       for (var i = 0; i < 4; i++) _bienDiem[i] = null;
       _toaDoBien.clear();
     });
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Da xoa 4 diem toa do bien')),
-    );
+    showThongBao(context, 'Da xoa 4 diem toa do bien');
   }
 
   Future<void> _layViTriHienTai() async {
@@ -154,20 +146,15 @@ class _ToaNhaFormScreenState extends State<ToaNhaFormScreen> {
           _locationLoading = false;
           _lastAccuracyMeters = result.accuracyMeters;
         });
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              'Da lay vi tri. Do chinh xac: ${result.accuracyMeters.toStringAsFixed(1)}m',
-            ),
-          ),
+        showThongBao(
+          context,
+          'Da lay vi tri. Do chinh xac: ${result.accuracyMeters.toStringAsFixed(1)}m',
         );
       }
     } catch (e) {
       if (mounted) {
         setState(() => _locationLoading = false);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Loi: $e')),
-        );
+        showThongBao(context, 'Loi: $e', isLoi: true);
       }
     }
   }
@@ -184,7 +171,7 @@ class _ToaNhaFormScreenState extends State<ToaNhaFormScreen> {
           ToaNhaViTriUpdateRequest(
             kinhDo: kinhDo,
             viDo: viDo,
-            toaDoBien: _toaDoBien.text.trim().isEmpty ? null : _toaDoBien.text.trim(),
+            toaDoBien: _toaDoBien.text.trim().isEmpty ? '' : _toaDoBien.text.trim(),
           ),
         );
       } else {
@@ -196,23 +183,19 @@ class _ToaNhaFormScreenState extends State<ToaNhaFormScreen> {
             tenChiTiet: _tenChiTiet.text.trim().isEmpty ? null : _tenChiTiet.text.trim(),
             kinhDo: double.tryParse(_kinhDo.text.trim()),
             viDo: double.tryParse(_viDo.text.trim()),
-            toaDoBien: _toaDoBien.text.trim().isEmpty ? null : _toaDoBien.text.trim(),
+            toaDoBien: _toaDoBien.text.trim().isEmpty ? '' : _toaDoBien.text.trim(),
             viTri: _viTri.text.trim().isEmpty ? null : _viTri.text.trim(),
           ),
         );
       }
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Luu thanh cong')),
-        );
+        showThongBao(context, 'Luu thanh cong');
         Navigator.pop(context, true);
       }
     } catch (e) {
       if (mounted) {
         setState(() => _saving = false);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Loi: $e')),
-        );
+        showThongBao(context, 'Loi: $e', isLoi: true);
       }
     }
   }

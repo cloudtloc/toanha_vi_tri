@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../models/toa_nha.dart';
 import '../services/toa_nha_api_service.dart';
+import '../utils/app_snackbar.dart';
 import 'toa_nha_form_screen.dart';
 
 class ToaNhaListScreen extends StatefulWidget {
@@ -64,16 +65,12 @@ class _ToaNhaListScreenState extends State<ToaNhaListScreen> {
     try {
       await ToaNhaApiService.xoaViTri(item.id);
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Da xoa vi tri')),
-        );
+        showThongBao(context, 'Da xoa vi tri');
         _load();
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Loi: $e')),
-        );
+        showThongBao(context, 'Loi: $e', isLoi: true);
       }
     }
   }
