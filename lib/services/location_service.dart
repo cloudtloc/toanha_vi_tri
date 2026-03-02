@@ -24,7 +24,7 @@ class LocationService {
   static Future<LocationResult> getViTriChinhXac() async {
     final enabled = await serviceEnabled;
     if (!enabled) {
-      throw Exception('Dich vu vi tri chua bat. Hay bat GPS tren thiet bi.');
+      throw Exception('Dịch vụ vị trí chưa bật. Hay bật GPS trên thiết bi.');
     }
 
     var perm = await permission;
@@ -33,11 +33,11 @@ class LocationService {
     }
     if (perm == LocationPermission.deniedForever) {
       throw Exception(
-        'Quyen vi tri bi tu choi vinh vien. Hay bat lai trong Cai dat ung dung.',
+        'Quyền vị trí bị từ chối vĩnh viễn. Hay bật lại trong Cài đặt ứng dụng.',
       );
     }
     if (perm == LocationPermission.denied) {
-      throw Exception('Can quyen truy cap vi tri chinh xac.');
+      throw Exception('Cần quyền truy cập vị trí chính xác.');
     }
 
     final locationSettings = LocationSettings(

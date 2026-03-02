@@ -33,4 +33,3 @@ end
 post_install do |installer|
   flutter_additional_ios_build_settings(installer)
 end
-

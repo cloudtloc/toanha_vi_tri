@@ -27,9 +27,9 @@ class ToaNhaApiService {
       uri,
       headers: {'Accept': 'application/json', 'ngrok-skip-browser-warning': 'true'},
     );
-    if (response.statusCode == 404) throw Exception('Khong tim thay toa nha id=$id');
+    if (response.statusCode == 404) throw Exception('Không tìm thấy toà nhà id=$id');
     if (response.statusCode != 200) {
-      throw Exception('Loi ${response.statusCode}: ${response.body}');
+      throw Exception('Lỗi ${response.statusCode}: ${response.body}');
     }
     return ToaNhaViTri.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
   }
@@ -46,7 +46,7 @@ class ToaNhaApiService {
       body: jsonEncode(request.toJson()),
     );
     if (response.statusCode != 200 && response.statusCode != 201) {
-      throw Exception('Loi ${response.statusCode}: ${response.body}');
+      throw Exception('Lỗi ${response.statusCode}: ${response.body}');
     }
     return ToaNhaViTri.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
   }
@@ -62,9 +62,9 @@ class ToaNhaApiService {
       },
       body: jsonEncode(request.toJson()),
     );
-    if (response.statusCode == 404) throw Exception('Khong tim thay toa nha id=$id');
+    if (response.statusCode == 404) throw Exception('Không tìm thấy toà nhà id=$id');
     if (response.statusCode != 200) {
-      throw Exception('Loi ${response.statusCode}: ${response.body}');
+      throw Exception('Lỗi ${response.statusCode}: ${response.body}');
     }
     return ToaNhaViTri.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
   }
@@ -75,9 +75,9 @@ class ToaNhaApiService {
       uri,
       headers: {'Accept': 'application/json', 'ngrok-skip-browser-warning': 'true'},
     );
-    if (response.statusCode == 404) throw Exception('Khong tim thay toa nha id=$id');
+    if (response.statusCode == 404) throw Exception('Không tìm thấy toà nhà id=$id');
     if (response.statusCode != 200 && response.statusCode != 204) {
-      throw Exception('Loi ${response.statusCode}: ${response.body}');
+      throw Exception('Lỗi ${response.statusCode}: ${response.body}');
     }
   }
 }

@@ -15,7 +15,7 @@ class ToanhaViTriApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Vi tri toa nha',
+      title: 'Vị trí toà nhà',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
