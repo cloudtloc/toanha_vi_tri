@@ -18,6 +18,14 @@ jobs:
           GOOGLE_MAPS_API_KEY=${{ secrets.GOOGLE_MAPS_API_KEY }}
           EOF
 
+      - name: Gan Google Maps API key vao Info.plist (tranh crash iOS khi mo map)
+        env:
+          GMS_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
+        run: |
+          if [ -n "$GMS_KEY" ]; then
+            /usr/libexec/PlistBuddy -c "Set :GMS_API_KEY $GMS_KEY" ios/Runner/Info.plist
+          fi
+
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
